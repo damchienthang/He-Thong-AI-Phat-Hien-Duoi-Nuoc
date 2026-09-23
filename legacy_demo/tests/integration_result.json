@@ -1,0 +1,20 @@
+[
+  {
+    "mode": "Mode A",
+    "video": "pool_demo.mp4",
+    "frames": 433,
+    "tracked_ids": [],
+    "classified_observations": 433,
+    "incident_events": 2
+  },
+  {
+    "mode": "Mode B",
+    "video": "pose_closeup.webm",
+    "frames": 160,
+    "tracked_ids": [
+      6
+    ],
+    "classified_observations": 52,
+    "incident_events": 1
+  }
+]
