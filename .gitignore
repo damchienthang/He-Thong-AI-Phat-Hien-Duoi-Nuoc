@@ -5,4 +5,7 @@ uploads/
 incidents/*/
 *.pt
 *.pth
+!**/models/cnn_lstm_best.pth
+!models/cnn_lstm_best.pth
+!**/yolov8n-pose.pt
 assets/demo/*.mp4

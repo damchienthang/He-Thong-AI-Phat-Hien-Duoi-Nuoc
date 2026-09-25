@@ -1,0 +1,33 @@
+{
+  "accuracy": 0.5694444444444444,
+  "f1_score": 0.5784977130288548,
+  "confusion_matrix": [
+    [
+      132,
+      77,
+      31
+    ],
+    [
+      22,
+      45,
+      42
+    ],
+    [
+      8,
+      6,
+      69
+    ]
+  ],
+  "best_epoch": 27,
+  "best_val_f1": 0.5872554770298035,
+  "num_params": 733188,
+  "num_classes": 3,
+  "class_names": [
+    "Normal",
+    "Drowning",
+    "Distress"
+  ],
+  "train_samples": 9947,
+  "val_samples": 505,
+  "test_samples": 432
+}

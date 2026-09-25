@@ -1,0 +1,91 @@
+{
+  "accuracy": 0.5694444444444444,
+  "balanced_accuracy": 0.5980564459673556,
+  "precision_macro": 0.5507642692575204,
+  "recall_macro": 0.5980564459673556,
+  "f1_macro": 0.549932195562273,
+  "precision_weighted": 0.6347380878959457,
+  "recall_weighted": 0.5694444444444444,
+  "f1_weighted": 0.5784977130288548,
+  "roc_auc_macro": 0.7553858232885299,
+  "roc_auc_weighted": 0.749378366853985,
+  "avg_precision_per_class": {
+    "Normal": 0.797608050684607,
+    "Drowning": 0.3121931280265236,
+    "Distress": 0.6853748804668107
+  },
+  "avg_precision_macro": 0.5983920197259804,
+  "mcc": 0.3564865031600955,
+  "cohen_kappa": 0.34140943888005515,
+  "confusion_matrix": [
+    [
+      132,
+      77,
+      31
+    ],
+    [
+      22,
+      45,
+      42
+    ],
+    [
+      8,
+      6,
+      69
+    ]
+  ],
+  "per_class": {
+    "Normal": {
+      "TP": 132,
+      "FP": 30,
+      "FN": 108,
+      "TN": 162,
+      "Sensitivity_Recall": 0.55,
+      "Specificity": 0.8438,
+      "Precision_PPV": 0.8148,
+      "NPV": 0.6,
+      "F1": 0.6567,
+      "AP_PR_AUC": 0.7976
+    },
+    "Drowning": {
+      "TP": 45,
+      "FP": 83,
+      "FN": 64,
+      "TN": 240,
+      "Sensitivity_Recall": 0.4128,
+      "Specificity": 0.743,
+      "Precision_PPV": 0.3516,
+      "NPV": 0.7895,
+      "F1": 0.3797,
+      "AP_PR_AUC": 0.3122
+    },
+    "Distress": {
+      "TP": 69,
+      "FP": 73,
+      "FN": 14,
+      "TN": 276,
+      "Sensitivity_Recall": 0.8313,
+      "Specificity": 0.7908,
+      "Precision_PPV": 0.4859,
+      "NPV": 0.9517,
+      "F1": 0.6133,
+      "AP_PR_AUC": 0.6854
+    }
+  },
+  "top2_accuracy": 0.8703703703703703,
+  "model_info": {
+    "best_epoch": 27,
+    "val_f1": 0.5873,
+    "val_acc": 0.5861,
+    "num_params": 733188,
+    "architecture": "CNN-1D + BiLSTM + Attention",
+    "num_classes": 3,
+    "class_names": [
+      "Normal",
+      "Drowning",
+      "Distress"
+    ],
+    "input_shape": "(N, 30, 34)",
+    "device": "cpu"
+  }
+}

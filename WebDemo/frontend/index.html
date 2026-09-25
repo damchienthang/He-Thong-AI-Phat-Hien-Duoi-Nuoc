@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Drowning Detection – Nhóm 7</title>
+  <meta name="description" content="Hệ thống phát hiện đuối nước thời gian thực sử dụng YOLOv8-Pose và phân tích tư thế cơ thể" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- ── Header ── -->
+  <header class="header">
+    <div class="header-brand">
+      <div class="logo-pulse">
+        <span class="logo-icon">🌊</span>
+        <div class="pulse-ring"></div>
+      </div>
+      <div>
+        <h1 class="header-title">AI Drowning Detection</h1>
+        <p class="header-sub">Hệ thống phát hiện đuối nước thông minh – Nhóm 7</p>
+      </div>
+    </div>
+    <div class="header-status">
+      <div class="status-badge" id="systemStatus">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Đang kết nối...</span>
+      </div>
+      <div class="header-mode" id="modeLabel">—</div>
+      <div class="header-time" id="headerTime">--:--:--</div>
+    </div>
+  </header>
+
+  <!-- ── Main Layout ── -->
+  <main class="main-layout">
+
+    <!-- ── Left: Video Feed ── -->
+    <section class="panel video-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">
+          <span class="panel-icon">📹</span>Camera Live Feed
+        </h2>
+        <div class="panel-controls">
+          <button class="btn btn-upload" id="btnUpload">📤 Upload Ảnh</button>
+          <button class="btn btn-video" id="btnUploadVideo">🎥 Upload Video</button>
+          <button class="btn btn-camera" id="btnCamera">📷 Webcam</button>
+          <input type="file" id="fileInput" accept="image/*" style="display:none"/>
+          <input type="file" id="videoFileInput" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/avi" style="display:none"/>
+        </div>
+      </div>
+      <div class="video-container" id="videoContainer">
+        <canvas id="videoCanvas" width="640" height="480"></canvas>
+        <video id="uploadedVideo" playsinline muted style="display:none"></video>
+
+        <!-- Floating Video Player Controls (khi phân tích video) -->
+        <div class="video-player-bar" id="videoPlayerBar" style="display:none">
+          <button class="vbar-btn" id="vbarPlayPause">⏸ Tạm dừng</button>
+          <span class="vbar-time" id="vbarTime">00:00 / 00:00</span>
+          <input type="range" class="vbar-progress" id="vbarProgress" min="0" max="100" value="0" />
+          <button class="vbar-btn vbar-stop" id="vbarStop">⏹ Dừng Video</button>
+        </div>
+
+        <div class="video-overlay" id="videoOverlay">
+          <div class="overlay-content">
+            <div class="overlay-icon">🏊</div>
+            <p>Chọn <strong>Upload Ảnh</strong>, <strong>Upload Video</strong> hoặc bật <strong>Webcam</strong></p>
+            <p>để hệ thống phân tích tư thế & nhận diện nguy cơ đuối nước</p>
+          </div>
+        </div>
+        <div class="video-stats">
+          <span class="v-stat"><span class="v-label">FPS</span><span id="fpsDisplay" class="v-val">--</span></span>
+          <span class="v-stat"><span class="v-label">Frame</span><span id="frameCount" class="v-val">0</span></span>
+          <span class="v-stat"><span class="v-label">Người</span><span id="personCount" class="v-val">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Right: Panels ── -->
+    <aside class="sidebar">
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card stat-safe">
+          <div class="stat-icon">✅</div>
+          <div class="stat-body">
+            <div class="stat-label">An toàn</div>
+            <div class="stat-value" id="safeCount">0</div>
+          </div>
+        </div>
+        <div class="stat-card stat-warn">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-body">
+            <div class="stat-label">Cảnh báo</div>
+            <div class="stat-value" id="warnCount">0</div>
+          </div>
+        </div>
+        <div class="stat-card stat-danger">
+          <div class="stat-icon">🆘</div>
+          <div class="stat-body">
+            <div class="stat-label">Nguy hiểm</div>
+            <div class="stat-value" id="dangerCount">0</div>
+          </div>
+        </div>
+        <div class="stat-card stat-total">
+          <div class="stat-icon">🔔</div>
+          <div class="stat-body">
+            <div class="stat-label">Tổng cảnh báo</div>
+            <div class="stat-value" id="totalAlerts">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone Map -->
+      <div class="panel zone-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><span class="panel-icon">🗺️</span>Bản đồ khu vực hồ bơi</h2>
+        </div>
+        <div class="zone-grid" id="zoneGrid">
+          <!-- Generated by JS -->
+        </div>
+        <div class="zone-legend">
+          <span class="legend-item"><span class="legend-dot safe"></span>An toàn</span>
+          <span class="legend-item"><span class="legend-dot warn"></span>Cảnh báo</span>
+          <span class="legend-item"><span class="legend-dot danger"></span>Nguy hiểm</span>
+        </div>
+      </div>
+
+      <!-- Detection List -->
+      <div class="panel detection-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><span class="panel-icon">👤</span>Phát hiện hiện tại</h2>
+          <span class="badge" id="detectionBadge">0</span>
+        </div>
+        <div class="detection-list" id="detectionList">
+          <div class="empty-state">Chưa có dữ liệu phát hiện</div>
+        </div>
+      </div>
+
+      <!-- Alert Log -->
+      <div class="panel alert-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><span class="panel-icon">🚨</span>Nhật ký cảnh báo</h2>
+          <button class="btn-clear" id="btnClearAlerts">Xóa</button>
+        </div>
+        <div class="alert-list" id="alertList">
+          <div class="empty-state">Chưa có cảnh báo nào</div>
+        </div>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ── Alert Modal ── -->
+  <div class="alert-modal" id="alertModal" style="display:none">
+    <div class="modal-content">
+      <div class="modal-icon">🆘</div>
+      <h2 class="modal-title">CẢNH BÁO ĐUỐI NƯỚC!</h2>
+      <p class="modal-body" id="modalBody"></p>
+      <button class="btn btn-danger modal-close" id="modalClose">Đã nhận</button>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <span>YOLOv8-Pose + Spatial Grid Filtering • Nhóm 7 – PPLNCKH 2026</span>
+    <span id="footerStats">Tổng frames: 0 | Detections: 0</span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
