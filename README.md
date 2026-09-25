@@ -1,6 +1,51 @@
-# CAM AI — Dashboard giám sát cứu hộ
+# HỆ THỐNG AI PHÁT HIỆN VÀ CẢNH BÁO NGUY CƠ ĐUỐI NƯỚC TẠI HỒ BƠI (NHÓM 7 - PPLNCKH)
 
-Bản gọn theo bảng phân công: **3.2 Dashboard cứu hộ**. Giao diện nhận kết quả từ backend của Thành; không tự huấn luyện, nạp model hoặc phát hiện đuối nước.
+> **Nhánh `webdemo`**: Cung cấp toàn bộ mã nguồn hệ thống Demo hoàn chỉnh tích hợp mô hình AI (YOLOv8n-pose + CNN-BiLSTM-Attention), Backend FastAPI và Giao diện Web giám sát thời gian thực.
+
+---
+
+## 🚀 Khởi chạy nhanh hệ thống WebDemo
+
+### Cách 1: Chạy bằng file Batch (Khuyến nghị trên Windows)
+Nhấp đúp chuột vào file **`CHAY_CHUONG_TRINH.bat`** tại thư mục gốc, hệ thống sẽ tự động khởi động server và mở trình duyệt tại:
+👉 **http://localhost:8000**
+
+### Cách 2: Khởi chạy thủ công bằng dòng lệnh
+
+1. Cài đặt các thư viện phụ thuộc:
+```bash
+pip install -r requirements.txt
+```
+
+2. Khởi chạy Backend FastAPI:
+```bash
+cd WebDemo/backend
+python -m uvicorn main:app --host 0.0.0.0 --port 8000
+```
+Truy cập vào **http://localhost:8000** để sử dụng giao diện giám sát AI.
+
+---
+
+## 📁 Cấu trúc thư mục nhánh `webdemo`
+
+- `CHAY_CHUONG_TRINH.bat`: Kịch bản 1-click khởi chạy toàn bộ server WebDemo trên Windows.
+- `WebDemo/`:
+  - `backend/`: Mã nguồn FastAPI xử lý luồng WebSocket và REST API phân tích ảnh/video.
+    - `main.py`: Điểm vào chính của server FastAPI, quản lý WebSocket broadcast và tiền xử lý.
+    - `model_inference.py`: Module tích hợp YOLOv8n-pose trích xuất 17 khớp xương và mô hình phân loại chuỗi thời gian CNN-LSTM.
+    - `yolov8n-pose.pt`: Trọng số mô hình phát hiện dáng người YOLOv8n-pose.
+    - `models/cnn_lstm_best.pth`: Trọng số mô hình học sâu CNN-BiLSTM phân loại hành vi đuối nước.
+    - `train_cnn_lstm.py` / `evaluate_metrics.py`: Mã nguồn huấn luyện và đánh giá mô hình.
+  - `frontend/`: Giao diện Dashboard HTML5/CSS/Vanilla JS giám sát trực quan thời gian thực.
+    - `index.html`: Giao diện hiển thị camera / video, canvas vẽ khung xương và thanh rủi ro.
+    - `app.js`: Xử lý giao tiếp WebSocket, tải video theo lô (batch preloading) và điều khiển âm thanh.
+    - `style.css`: Bộ giao diện hiện đại với bảng điều khiển giám sát an ninh.
+
+---
+
+## CAM AI — Dashboard giám sát cứu hộ (Task 3.2 cũ)
+
+Bản gọn theo bảng phân công: **3.2 Dashboard cứu hộ**. Giao diện nhận kết quả từ backend; không tự huấn luyện, nạp model hoặc phát hiện đuối nước.
 
 Phạm vi triển khai là nhiệm vụ 3.2. Phần so sánh và thảo luận kết quả mô hình thuộc nhiệm vụ 3.4, ngoài phạm vi dashboard.
 

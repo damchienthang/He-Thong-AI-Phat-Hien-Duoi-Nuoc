@@ -1,0 +1,56 @@
+=================================================================
+  CHỈ SỐ ĐÁNH GIÁ MÔ HÌNH CNN-LSTM – NHÓM 7
+=================================================================
+
+[Model] CNN-1D + BiLSTM + Attention  |  Params: 733,188
+        Best epoch: 27  |  Val F1: 0.5873
+
+── Chỉ số tổng quát ─────────────────────────────────────────
+  Accuracy             : 0.5694  (56.94%)
+  Balanced Accuracy    : 0.5981  (59.81%)
+  Top-2 Accuracy       : 0.8704  (87.04%)
+  Matthews CC (MCC)    : 0.3565
+  Cohen's Kappa (κ)    : 0.3414
+
+── Precision / Recall / F1 ──────────────────────────────────
+  Metric                    Macro    Weighted
+  --------------------------------------------
+  Precision                0.5508      0.6347
+  Recall                   0.5981      0.5694
+  F1                       0.5499      0.5785
+
+── ROC-AUC (One-vs-Rest) ────────────────────────────────────
+  ROC-AUC Macro        : 0.7553858232885299
+  ROC-AUC Weighted     : 0.749378366853985
+
+── PR-AUC (Average Precision) ───────────────────────────────
+  AP [Normal    ]     : 0.7976
+  AP [Drowning  ]     : 0.3122
+  AP [Distress  ]     : 0.6854
+  AP Macro             : 0.5984
+
+── Chỉ số theo từng lớp ─────────────────────────────────────
+  Class        Sens/Recall    Spec  Prec/PPV     NPV      F1      AP  TP  FP  FN  TN
+  -------------------------------------------------------------------------------------
+  Normal            0.5500  0.8438    0.8148  0.6000  0.6567  0.7976  132  30 108 162
+  Drowning          0.4128  0.7430    0.3516  0.7895  0.3797  0.3122   45  83  64 240
+  Distress          0.8313  0.7908    0.4859  0.9517  0.6133  0.6854   69  73  14 276
+
+── Ma trận nhầm lẫn (Confusion Matrix) ─────────────────────
+                   Normal    Drowning    Distress  ← Predicted
+  Normal              132          77          31
+  Drowning             22          45          42
+  Distress              8           6          69
+
+── Classification Report ────────────────────────────────────
+              precision    recall  f1-score   support
+
+      Normal       0.81      0.55      0.66       240
+    Drowning       0.35      0.41      0.38       109
+    Distress       0.49      0.83      0.61        83
+
+    accuracy                           0.57       432
+   macro avg       0.55      0.60      0.55       432
+weighted avg       0.63      0.57      0.58       432
+
+=================================================================
